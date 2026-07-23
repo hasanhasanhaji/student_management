@@ -1,13 +1,9 @@
 from fastapi import FastAPI
 from typing import Optional
-from app.schemas.students import StudentCreate
-from app.schemas.books import BookCreate
+from app.api.student import router as student_router
+
+
 app = FastAPI()
 
-@app.post('/students')
-def create_student(student:StudentCreate):
-    return student
+app.include_router(student_router)
 
-@app.post('/books')
-def create_book(book:BookCreate):
-    return book
