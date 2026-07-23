@@ -13,17 +13,11 @@ service = StudentService()
 
 @router.get("/")
 def get_students():
-    return {
-        "id": 1,
-        "name": "Ali",
-    }
+    return  service.get_students()
 
 @router.get("/{student_id}")
 def get_students(student_id: int):
-    return {
-        "id": student_id,
-        "name": "Ali",
-    }
+    return service.get_students(student_id)
 
 
 @router.post("/")
@@ -32,4 +26,8 @@ def create_student(student: StudentCreate):
 
 @router.put("/{student_id}")
 def update_student(student_id: int,student:StudentUpdate):
-    return service.StudentUpdate(student_id,student)
+    return service.update_student(student_id,student)
+
+@router.delete("/{student_id}")
+def delete_student(student_id: int):
+    return service.delete_student(student_id)
