@@ -1,54 +1,56 @@
 from datetime import datetime
+from sqlalchemy.orm import Session  
+from app.models.student import Student
 
 class StudentRepository:
-    def __init__(self):
-        self.students = []
-        self.current_id = 1
+    def __init__(self, db:Session):
+        self.db = db
 
     def get_all(self):
-        return self.students
+        return self.db.query(Student).all()
 
-    def get_by_id(self, student_id):
-        for student in self.students:
-            if student["id"] == student_id:
-                return student
-        return None
+    # def get_by_id(self, student_id):
+    #     for student in self.students:
+    #         if student["id"] == student_id:
+    #             return student
+    #     return None
 
     def create(self, student):
-        new_student = student.model_dump()
+        db_student = Student(
+            first_name=student.first_name,
+            last_name=student.last_name,
+            email=student.email,
+            age=student.age,
+            major=student.major,
+             gpa=student.gpa
+        )
+        self.db.add(db_student)
+        self.db.commit()
+        self.db.refresh(db_student)
+        return db_student
 
-        new_student["id"] = self.current_id
-        new_student["created_at"] = datetime.now()
-        new_student["updated_at"] = datetime.now()
+    # def update(self, student_id, student):
 
-        self.current_id += 1
+    #     existing = self.get_by_id(student_id)
 
-        self.students.append(new_student)
+    #     if existing is None:
+    #         return None
 
-        return new_student
+    #     data = student.model_dump(exclude_unset=True)
 
-    def update(self, student_id, student):
+    #     existing.update(data)
 
-        existing = self.get_by_id(student_id)
+    #     existing["updated_at"] = datetime.now()
 
-        if existing is None:
-            return None
+    #     return existing
 
-        data = student.model_dump(exclude_unset=True)
+    # def delete(self, student_id):
 
-        existing.update(data)
+    #     existing = self.get_by_id(student_id)
 
-        existing["updated_at"] = datetime.now()
+    #     if existing is None:
+    #         return False
 
-        return existing
+    #     self.students.remove(existing)
 
-    def delete(self, student_id):
-
-        existing = self.get_by_id(student_id)
-
-        if existing is None:
-            return False
-
-        self.students.remove(existing)
-
-        return True
+    #     return True

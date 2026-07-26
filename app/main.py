@@ -1,9 +1,14 @@
 from fastapi import FastAPI
-from typing import Optional
+from app.core.database import Base
+from app.core.database import engine
+from app.models.student import Student
 from app.api.student import router as student_router
 
 
 app = FastAPI()
 
+Base.metadata.create_all(bind=engine)
+
 app.include_router(student_router)
+
 
