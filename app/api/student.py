@@ -19,16 +19,19 @@ router = APIRouter(
 
 @router.get("/")
 def get_students(db: Session = Depends(get_db)):
-    repo =  StudentRepository(db)
-    return repo.get_all()
+    service = StudentService(db)
+    return service.get_students()
+
 # @router.get("/{student_id}")
 # def get_students(student_id: int):
 #     return service.get_students(student_id)
 
 
-# @router.post("/")
-# def create_student(student: StudentCreate):
-#     return service.create_student(student)
+@router.post("/")
+def create_student(student: StudentCreate, db:Session = Depends(get_db)):
+    service = StudentService(db)
+    return service.create_student(student)
+   
 
 # @router.put("/{student_id}")
 # def update_student(student_id: int,student:StudentUpdate):
