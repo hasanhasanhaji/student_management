@@ -9,11 +9,8 @@ class StudentRepository:
     def get_all(self):
         return self.db.query(Student).all()
 
-    # def get_by_id(self, student_id):
-    #     for student in self.students:
-    #         if student["id"] == student_id:
-    #             return student
-    #     return None
+    def get_by_id(self, student_id: int):
+        return self.db.query(Student).fliter(Student.id == student_id).first()
 
     def create(self, student):
         db_student = Student(
