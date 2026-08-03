@@ -24,7 +24,7 @@ def get_students(db: Session = Depends(get_db)):
 
 @router.get("/{student_id}")
 def get_student(student_id: int, db: Session = Depends(get_db)):
-    service = StudentService()
+    service = StudentService(db)
     return service.get_student(student_id)
 
 

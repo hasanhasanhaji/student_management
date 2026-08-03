@@ -10,7 +10,7 @@ class StudentRepository:
         return self.db.query(Student).all()
 
     def get_by_id(self, student_id: int):
-        return self.db.query(Student).fliter(Student.id == student_id).first()
+        return self.db.query(Student).filter(Student.id == student_id).first()
 
     def create(self, student):
         db_student = Student(
@@ -26,20 +26,23 @@ class StudentRepository:
         self.db.refresh(db_student)
         return db_student
 
-    # def update(self, student_id, student):
+    def update(self, student_id: int, student_data):
 
-    #     existing = self.get_by_id(student_id)
+        student = self.get_by_id(student_id)
 
-    #     if existing is None:
-    #         return None
+        if student is None:
+            return None
+        student.first_name = student_data.firast_name
+        student.last_name = student_data.last_name
+        student.email = student_data.email
+        student.age = student_data.age
+        student.major = student_data.major
+        student.gpa = student_data.gpa
 
-    #     data = student.model_dump(exclude_unset=True)
+        self.db.commit()
+        self.db.refresh()
 
-    #     existing.update(data)
-
-    #     existing["updated_at"] = datetime.now()
-
-    #     return existing
+        return student
 
     # def delete(self, student_id):
 
