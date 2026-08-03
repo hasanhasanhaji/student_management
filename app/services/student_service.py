@@ -21,8 +21,17 @@ class StudentService:
     def create_student(self, student):
         return self.repository.create(student)
 
-    # def update_student(self, student_id, student):
-    #     return self.repository.update(student_id, student)
+    def update_student(self, student_id: int, student):
+        updated_student = self.repository.update(
+             student_id,
+        student
+        )
+        if self.update_student is None:
+            raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+        return updated_student    
 
     # def delete_student(self, student_id):
     #     return self.repository.delete(student_id)
