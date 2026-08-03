@@ -32,7 +32,7 @@ class StudentRepository:
 
         if student is None:
             return None
-        student.first_name = student_data.firast_name
+        student.first_name = student_data.first_name
         student.last_name = student_data.last_name
         student.email = student_data.email
         student.age = student_data.age
@@ -40,7 +40,7 @@ class StudentRepository:
         student.gpa = student_data.gpa
 
         self.db.commit()
-        self.db.refresh()
+        self.db.refresh(student)
 
         return student
 

@@ -34,9 +34,13 @@ def create_student(student: StudentCreate, db:Session = Depends(get_db)):
     return service.create_student(student)
    
 
-# @router.put("/{student_id}")
-# def update_student(student_id: int,student:StudentUpdate):
-#     return service.update_student(student_id,student)
+@router.put("/{student_id}")
+def update_student(student_id: int,student:StudentUpdate, db: Session = Depends(get_db)):
+    service = StudentService(db)
+    return service.update_student(
+        student_id,
+        student
+    )
 
 # @router.delete("/{student_id}")
 # def delete_student(student_id: int):
