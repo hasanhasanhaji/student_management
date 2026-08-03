@@ -22,9 +22,10 @@ def get_students(db: Session = Depends(get_db)):
     service = StudentService(db)
     return service.get_students()
 
-# @router.get("/{student_id}")
-# def get_students(student_id: int):
-#     return service.get_students(student_id)
+@router.get("/{student_id}")
+def get_student(student_id: int, db: Session = Depends(get_db)):
+    service = StudentService()
+    return service.get_student(student_id)
 
 
 @router.post("/")
