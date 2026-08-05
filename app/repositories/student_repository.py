@@ -44,13 +44,11 @@ class StudentRepository:
 
         return student
 
-    # def delete(self, student_id):
+    def delete(self, student_id: int):
+        student = self.get_by_id(student_id)
+        if student is None:
+            return None
+        self.db.delete(student)
+        self.db.commit()
 
-    #     existing = self.get_by_id(student_id)
-
-    #     if existing is None:
-    #         return False
-
-    #     self.students.remove(existing)
-
-    #     return True
+        return True
