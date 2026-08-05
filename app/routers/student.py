@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.schemas.student import StudentCreate
 
 # Create a router for student-related endpoints
 router = APIRouter()
@@ -17,4 +18,12 @@ def get_students():
                 "name": "Sara"
             }
         ]
+    }
+
+# Define a POST endpoint to create a new student
+@router.post("/students")
+def create_student(student: StudentCreate):
+    return {
+        "message": "Student created successfully",
+        "student": student
     }
