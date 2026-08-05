@@ -1,26 +1,25 @@
 from app.schemas.student import StudentCreate
 from sqlalchemy.orm import Session
-from app.repositories.student_repository import create_student
+from app.repositories.student_repository import *
 
-students_db= []  # Initialize an empty list to store student records
 
-def get_students_service():
+def get_students_service( db: Session):
     """
     Retrieve all student records from the in-memory database.
 
     Returns:
         List of student objects.
     """
-    return students_db
+    return get_students(db)
 
-def get_student_by_id_service(student_id: int):
+def get_student_service( db: Session,student_id: int):
     """
     Find student by ID.
     """
-    for student in students_db:
-        if student["id"] == student_id:
-            return student
-    return None
+    return get_student_by_id(
+        db,
+        student_id
+    )
 
 def create_student_service(db: Session,student: StudentCreate):
     """
@@ -37,21 +36,35 @@ def create_student_service(db: Session,student: StudentCreate):
         student
     )
 
-def delete_student_service(student_id: int):
+def update_student_service(
+    db: Session,
+    student_id: int,
+    student: StudentCreate
+):
+
     """
-    Delete student by ID.
+    Update student.
     """
-    for index, student in enumerate(students_db):
 
 
-        if student["id"] == student_id:
+    return update_student(
+        db,
+        student_id,
+        student
+    )
 
 
-            # Remove student from storage.
-            deleted_student = students_db.pop(index)
+def delete_student_service(
+    db: Session,
+    student_id: int
+):
+
+    """
+    Delete student.
+    """
 
 
-            return deleted_student
-
-
-    return None
+    return delete_student(
+        db,
+        student_id
+    )
