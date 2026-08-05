@@ -1,4 +1,6 @@
 from app.schemas.student import StudentCreate
+from sqlalchemy.orm import Session
+from app.repositories.student_repository import create_student
 
 students_db= []  # Initialize an empty list to store student records
 
@@ -20,7 +22,7 @@ def get_student_by_id_service(student_id: int):
             return student
     return None
 
-def create_student_service(student: StudentCreate):
+def create_student_service(db: Session,student: StudentCreate):
     """
     Create a new student record and add it to the in-memory database.
     Args:
@@ -30,16 +32,10 @@ def create_student_service(student: StudentCreate):
     Returns:
         Created student object.
     """
-    new_student = { "id": len(students_db) + 1,
-
-        "name": student.name,
-
-        "age": student.age,
-
-        "email": student.email }
-    students_db.append(new_student)
-
-    return new_student
+    return create_student(
+        db,
+        student
+    )
 
 def delete_student_service(student_id: int):
     """

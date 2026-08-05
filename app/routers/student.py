@@ -1,7 +1,12 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
+from fastapi import Depends
 from app.schemas.student import StudentCreate, StudentResponse
+from app.database.database import get_db
 from app.services.student_service import *
+
+
 # Create a router for student-related endpoints
 router = APIRouter()
 
@@ -26,7 +31,7 @@ def get_student_by_id(student_id: int):
 
 # Define a POST endpoint to create a new student
 @router.post("/students", response_model=StudentResponse)
-def create_student(student: StudentCreate): 
+def create_student(student: StudentCreate, db: Session = Depends(get_db)): 
     """
     Create student API endpoint.
 
@@ -34,9 +39,8 @@ def create_student(student: StudentCreate):
     Receive request and call service layer.
     """
 
-    # Call business logic from service layer.
-    created_student = create_student_service(student)
-
+    # Send request to service layer
+    created_student = create_student_service(db,student)
     return created_student
 
 @router.delete("/students/{student_id}")
