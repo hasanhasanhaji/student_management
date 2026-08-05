@@ -17,24 +17,24 @@ router = APIRouter(
 # service = StudentService()
 
 
-@router.get("/")
+@router.get("/", response_model=list[StudentResponse])
 def get_students(db: Session = Depends(get_db)):
     service = StudentService(db)
     return service.get_students()
 
-@router.get("/{student_id}")
+@router.get("/{student_id}", response_model=StudentResponse)
 def get_student(student_id: int, db: Session = Depends(get_db)):
     service = StudentService(db)
     return service.get_student(student_id)
 
 
-@router.post("/")
+@router.post("/", response_model=StudentResponse)
 def create_student(student: StudentCreate, db:Session = Depends(get_db)):
     service = StudentService(db)
     return service.create_student(student)
    
 
-@router.put("/{student_id}")
+@router.put("/{student_id}", response_model=StudentResponse)
 def update_student(student_id: int,student:StudentUpdate, db: Session = Depends(get_db)):
     service = StudentService(db)
     return service.update_student(
