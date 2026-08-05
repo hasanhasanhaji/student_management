@@ -42,6 +42,7 @@ def update_student(student_id: int,student:StudentUpdate, db: Session = Depends(
         student
     )
 
-# @router.delete("/{student_id}")
-# def delete_student(student_id: int):
-#     return service.delete_student(student_id)
+@router.delete("/{student_id}")
+def delete_student(student_id: int, db: Session = Depends(get_db)):
+    service = StudentService(db)
+    return service.delete_student(student_id)
