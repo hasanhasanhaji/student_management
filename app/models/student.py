@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import DateTime
 from app.core.database import Base
-
+from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
@@ -47,3 +47,5 @@ class Student(Base):
         default=datetime.utcnow,
         onupdate=datetime.utcnow
     )
+
+    courses = relationship("Course", back_populates="student", cascade="all, delete-orphan")
