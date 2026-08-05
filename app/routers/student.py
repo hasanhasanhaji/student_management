@@ -1,24 +1,28 @@
 from fastapi import APIRouter
+from fastapi import HTTPException
 from app.schemas.student import StudentCreate, StudentResponse
-from app.services.student_service import create_student_service
+from app.services.student_service import *
 # Create a router for student-related endpoints
 router = APIRouter()
 
 # Define a GET endpoint to retrieve a list of students
 @router.get("/students")
 def get_students():
-    return {
-        "students": [
-            {
-                "id": 1,
-                "name": "Ali"
-            },
-            {
-                "id": 2,
-                "name": "Sara"
-            }
-        ]
-    }
+    """
+    Get all students API endpoint.
+    """
+    return get_students_service()
+
+@router.get("/students/{student_id}")
+def get_student_by_id(student_id: int):
+    """
+    Get student by ID API endpoint.
+    """
+    student = get_student_by_id_service(student_id)
+    if student:
+        return student
+    else:
+        raise HTTPException(status_code=404, detail="Student not found")
 
 # Define a POST endpoint to create a new student
 @router.post("/students", response_model=StudentResponse)
@@ -29,8 +33,35 @@ def create_student(student: StudentCreate):
     Router responsibility:
     Receive request and call service layer.
     """
-    
+
     # Call business logic from service layer.
     created_student = create_student_service(student)
 
     return created_student
+
+@router.delete("/students/{student_id}")
+def delete_student(student_id: int):
+
+    """
+    Delete student endpoint.
+    """
+
+
+    student = delete_student_service(student_id)
+
+
+    # Student was not found.
+    if student is None:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Student not found"
+        )
+
+
+    return {
+
+        "message": "Student deleted",
+
+        "student": student
+    }
