@@ -33,6 +33,18 @@ class StudentService:
         )
         return updated_student    
 
-    # def delete_student(self, student_id):
-    #     return self.repository.delete(student_id)
+    def delete_student(self, student_id: int):
+        deleted = self.repository.delete(student_id)
+
+        if deleted is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Student not found"
+            )
+        
+        return {
+        "message": "Student deleted successfully"
+        }
+
+        
 
