@@ -12,5 +12,12 @@ class StudentResponse(BaseModel):
     name: str
     age: int
     email: str
+    
+class StudentUpdate(BaseModel):
 
+    name: str
+
+    age: int
+
+    email: str
     
