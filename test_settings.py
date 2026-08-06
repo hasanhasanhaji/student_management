@@ -1,3 +1,20 @@
-from app.core.config import settings
+from app.security.hashing import (
+    hash_password,
+    verify_password,
+)
 
-print(settings.DATABASE_URL)
+password = "123456"
+
+hashed = hash_password(password)
+
+print("Hash:")
+print(hashed)
+
+print()
+
+print(
+    verify_password(
+        "123456",
+        hashed,
+    )
+)
