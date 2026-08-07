@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 from app.database.dependencies import get_db
 from app.schemas.student import StudentCreate, StudentResponse, StudentUpdate
@@ -33,12 +34,26 @@ def get_student(student_id: int, db: Session= Depends(get_db)):
     )
     result = db.execute(statement)
     student = result.scalars().first()
+
+    if student is None:
+        raise HTTPException(
+            status_code= 404,
+            detail= "Student is not found"
+        )
     return student
 
 # Create a new student
-@router.post("/",response_model=StudentResponse, status_code= 201)
-def create_student(student :StudentCreate, db: Session = Depends(get_db)):
-    return student_service.create_student( db, student)
+@router.post( "/", response_model=StudentResponse, status_code=201 ) 
+def create_student( student: StudentCreate, db: Session = Depends(get_db) ): 
+    new_student = Student( name=student.name, age=student.age, email=student.email ) 
+    db.add(new_student) 
+    try: 
+        db.commit() 
+        db.refresh(new_student) 
+    except IntegrityError: 
+        db.rollback() 
+        raise HTTPException( status_code=409, detail="Email already exists" ) 
+    return new_student
 
 # Update
 @router.patch("/student_id", response_model=StudentResponse)
