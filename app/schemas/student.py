@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 # Schema for creating a new student
@@ -21,3 +21,8 @@ class StudentResponse(BaseModel):
     name: str
     age: int
     email: EmailStr
+
+    # Allow Pydantic to read SQLAlchemy ORM objects
+    model_config = ConfigDict(
+        from_attributes= True
+    )
