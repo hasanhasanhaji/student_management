@@ -26,3 +26,15 @@ class StudentResponse(BaseModel):
     model_config = ConfigDict(
         from_attributes= True
     )
+
+# 
+class StudentListResponse(BaseModel):
+    items: list[StudentResponse]
+
+    total: int
+
+    page: int
+
+    size: int
+
+    pages: int
